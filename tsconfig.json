@@ -24,7 +24,7 @@
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx"
-  ],
+, "faker/generate.fake.js"  ],
   "exclude": [
     "node_modules"
   ]
