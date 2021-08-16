@@ -4,7 +4,7 @@ export const Home = (): JSX.Element => (
   <>
     <Layout>
       <h1 className="w-full text-center pt-7 text-3xl font-semibold">
-        Playground Site
+        Student
       </h1>
     </Layout>
   </>
