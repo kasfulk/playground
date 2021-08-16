@@ -1,40 +1,18 @@
-import pool from "services/db";
-import { nanoid } from "nanoid";
+import { StudentModel } from "models/student/student";
 
-const handler = async (req, res) => {
+const student = new StudentModel();
+
+const handler = async (req, res): Promise<any> => {
   const {
     query: { id },
-    body: { name, email },
     method,
   } = req;
   switch (method) {
-    case "POST":
-      if (!name || !email) {
-        res.status(400).json({
-          message: "Invalid body parameter!",
-        });
-      }
-      const dataId = nanoid();
-      const query = await pool.execute(
-        "INSERT INTO students (id,name,email) VALUES (?,?,?)",
-        [dataId, name, email]
-      );
-      res.status(200).json({
-        message: "Successfully inserted student!",
-        query,
-      });
+    case "GET": {
+      const result = await student.findId(id);
+      res.status(200).send(result);
       break;
-
-    default:
-      const [rows, fields] = await pool.query(
-        "SELECT * FROM student WHERE id = ?",
-        id
-      );
-      res.status(200).json({
-        fields: fields.map((field) => field.name),
-        data: rows,
-      });
-      break;
+    }
   }
 };
 
