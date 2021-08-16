@@ -1,6 +1,6 @@
-import mysql from "services/db";
-import { nanoid } from "nanoid";
-// import { Student } from "types/student.interface";
+import { StudentModel } from "models/student/student.service";
+
+const student = new StudentModel();
 
 const handler = async (req, res): Promise<any> => {
   const {
@@ -9,28 +9,19 @@ const handler = async (req, res): Promise<any> => {
   } = req;
   switch (method) {
     case "POST": {
-      if (!name || !email) {
-        res.status(400).json({
-          message: "Invalid body parameter!",
-        });
-      }
-      const dataId: string = nanoid();
-      const query = await mysql.execute(
-        "INSERT INTO student (id,name,email) VALUES (?,?,?)",
-        [dataId, name, email]
-      );
-      res.status(200).json({
-        message: "Successfully inserted student!",
-        query,
-      });
+      const result = await student.create(name, email);
+      res.status(200).json(result);
+      break;
+    }
+    case "GET": {
+      const result = await student.findAll();
+      res.status(200).json(result);
       break;
     }
 
     default: {
-      const [rows, fields] = await mysql.query("SELECT * FROM student");
-      res.status(200).json({
-        fields: fields.map((field) => field.name),
-        data: rows,
+      res.status(404).json({
+        message: "Method not supported!",
       });
       break;
     }

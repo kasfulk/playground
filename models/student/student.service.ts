@@ -1,16 +1,6 @@
 import mysql from "services/db";
 import { nanoid } from "nanoid";
-import { Student } from "types/student.interface";
-import { Challenge } from "types/challenge.interface";
-
-interface StudentResult {
-  student: Student;
-  challenge: Challenge[];
-}
-
-interface StudentAll {
-  data: Student[];
-}
+import { StudentResult, StudentAll } from "./student.interface";
 
 export class StudentModel {
   async findId(id: string): Promise<StudentResult> {
@@ -40,13 +30,14 @@ export class StudentModel {
     }
     const dataId: string = nanoid();
 
-    const query = await mysql.execute(
-      "INSERT INTO students (id,name,email) VALUES (?,?,?)",
+    const [rows] = await mysql.query(
+      `INSERT INTO student (id,name,email) VALUES (?,?,?);
+      SELECT * FROM student WHERE id = LAST_INSER_ID()`,
       [dataId, name, email]
     );
     return {
       message: "Successfully inserted student!",
-      query,
+      student: rows[1][0],
     };
   }
 }

@@ -1,4 +1,4 @@
-import { StudentModel } from "models/student/student";
+import { StudentModel } from "models/student/student.service";
 
 const student = new StudentModel();
 
