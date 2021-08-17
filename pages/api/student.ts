@@ -4,18 +4,24 @@ const student = new StudentModel();
 
 const handler = async (req, res): Promise<any> => {
   const {
-    body: { name, email },
+    body: { page },
     method,
   } = req;
+  console.log(method);
   switch (method) {
     case "POST": {
-      const result = await student.create(name, email);
-      res.status(200).json(result);
+      const { data } = await student.findAll(page);
+      res.status(200).json(data);
       break;
     }
     case "GET": {
-      const result = await student.findAll();
-      res.status(200).json(result);
+      const { data } = await student.findAll(1);
+      res.status(200).json(data);
+      break;
+    }
+    case "OPTIONS": {
+      const totalPage = await student.totalPage();
+      res.status(200).json(totalPage);
       break;
     }
 

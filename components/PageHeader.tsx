@@ -30,28 +30,23 @@ const PageHeader: React.FC = () => {
                 <li className="nav-item">
                   <div
                     className={
-                      router.pathname == "/student" ? `active` : `defaultLink`
+                      router.pathname.includes("student")
+                        ? `active`
+                        : `defaultLink`
                     }
                   >
-                    <Link href="student">Student</Link>
+                    <Link href="/student">Student</Link>
                   </div>
                 </li>
                 <li className="nav-item">
                   <div
                     className={
-                      router.pathname == "/challenge" ? `active` : `defaultLink`
+                      router.pathname.includes("challenge")
+                        ? `active`
+                        : `defaultLink`
                     }
                   >
-                    <Link href="challenge">Challenge</Link>
-                  </div>
-                </li>
-                <li className="nav-item">
-                  <div
-                    className={
-                      router.pathname == "/settings" ? `active` : `defaultLink`
-                    }
-                  >
-                    <Link href="settings">Settings</Link>
+                    <Link href="/challenge">Challenge</Link>
                   </div>
                 </li>
               </ul>
