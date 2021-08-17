@@ -19,11 +19,6 @@ const handler = async (req, res): Promise<any> => {
       res.status(200).json(data);
       break;
     }
-    case "OPTIONS": {
-      const totalPage = await student.totalPage();
-      res.status(200).json(totalPage);
-      break;
-    }
 
     default: {
       res.status(404).json({

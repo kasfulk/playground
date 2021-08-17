@@ -34,7 +34,6 @@ export class StudentModel {
     const pagination = page ? `LIMIT ${skip},${this.limit}` : "";
     try {
       const [rows] = await mysql.query(`SELECT * FROM student ${pagination};`);
-      console.log(rows);
       return {
         data: rows,
       };

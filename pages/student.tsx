@@ -5,16 +5,16 @@ import Layout from "components/Layout";
 import StudentCard from "components/Student";
 import { StudentAll } from "models/student/student.interface";
 
-// const url: string = process.env.API_URL;
+const url: string = process.env.API_URL;
 
 interface PageRequest {
   page: number;
 }
 
 export const getStaticProps: GetStaticProps<StudentAll> = async () => {
-  const { data } = await axios.get("http://localhost:3000/api/student");
-  const reviewer = await axios.get("http://localhost:3000/api/reviewer");
-  const page = await axios.get("http://localhost:3000/api/student/total-page");
+  const { data } = await axios.get(url + "api/student");
+  const reviewer = await axios.get(url + "api/reviewer");
+  const page = await axios.get(url + "api/student/total-page");
   console.log(data);
   return {
     props: {
@@ -35,11 +35,8 @@ export const StudentPage = ({ data, idReviewer, totalPage }): JSX.Element => {
     const body: PageRequest = {
       page: page + 1,
     };
-    const { data } = await axios.post(
-      "http://localhost:3000/api/student",
-      body
-    );
-    const reviewerApi = await axios.get("http://localhost:3000/api/reviewer");
+    const { data } = await axios.post(url + "api/student", body);
+    const reviewerApi = await axios.get(url + "api/reviewer");
     const reviewerData = reviewerApi.data.idReviewer
       ? reviewerApi.data.idReviewer
       : "";
@@ -53,11 +50,8 @@ export const StudentPage = ({ data, idReviewer, totalPage }): JSX.Element => {
     const body: PageRequest = {
       page: page - 1,
     };
-    const { data } = await axios.post(
-      "http://localhost:3000/api/student",
-      body
-    );
-    const reviewerApi = await axios.get("http://localhost:3000/api/reviewer");
+    const { data } = await axios.post(url + "api/student", body);
+    const reviewerApi = await axios.get(url + "api/reviewer");
     const reviewerData = reviewerApi.data.idReviewer
       ? reviewerApi.data.idReviewer
       : "";

@@ -9,7 +9,11 @@ const generateData = async (): Promise<any> => {
   for (let i = 0; i < 100; i++) {
     const id = nanoid();
     const name: string = faker.name.findName();
-    const username: string = name.toLowerCase().replace(" ", ".");
+    const lastNameLength = name.toLowerCase().split(" ").length;
+    const username: string =
+      name.toLowerCase().split(" ")[0] +
+      "." +
+      name.toLowerCase().split(" ")[lastNameLength - 1];
     const email = `${username}@email.com`;
     arrayStudent.push(`("${id}", "${name}", "${email}")`);
     for (let s = 0; s < 12; s++) {

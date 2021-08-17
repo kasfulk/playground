@@ -13,7 +13,6 @@ export class ReviewerClass {
     this.reviewer.push({
       idReviewer: newReviewer,
     });
-    console.log(this.reviewer);
     return this.reviewer;
   }
 

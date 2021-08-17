@@ -38,8 +38,8 @@ const StudentCard: React.FC<{ data: Student[]; idReviewer: string }> = ({
               className="flex w-full h-full p-3 bg-white rounded-lg shadow-sm"
               key={data.id}
             >
-              <div className="flex w-2/3">
-                <div className="p-3 mr-4 bg-blue-400 text-white rounded-full flex">
+              <div className="flex h-16 w-2/3 align-middle">
+                <div className="p-3 mr-4 h-12 w-12 bg-blue-400 text-white rounded-full flex">
                   <svg
                     className="w-6 h-6"
                     fill="none"
