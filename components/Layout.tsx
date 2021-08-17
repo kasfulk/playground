@@ -1,5 +1,5 @@
-import Head from 'next/head'
-import PageHeader from './PageHeader'
+import Head from "next/head";
+import PageHeader from "./PageHeader";
 
 export const Layout = ({ children }): JSX.Element => (
   <>
@@ -14,6 +14,6 @@ export const Layout = ({ children }): JSX.Element => (
       </div>
     </main>
   </>
-)
+);
 
-export default Layout
+export default Layout;
