@@ -6,8 +6,8 @@ const handler = async (req, res): Promise<void> => {
   const { method } = req;
   switch (method) {
     case "GET": {
-      const { rows } = await student.totalPage();
-      res.status(200).json({ totalPage: rows[0].totalPage });
+      const rows = await student.totalPage();
+      res.status(200).json(rows);
       break;
     }
 

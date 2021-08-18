@@ -1,6 +1,8 @@
 import faker from "faker";
 import { nanoid } from "nanoid";
-import mysql from "services/db";
+import { PrismaClient } from "@prisma/client";
+
+const prisma = new PrismaClient();
 
 const generateData = async (): Promise<any> => {
   const arrayStudent = [];
@@ -15,25 +17,37 @@ const generateData = async (): Promise<any> => {
       "." +
       name.toLowerCase().split(" ")[lastNameLength - 1];
     const email = `${username}@email.com`;
-    arrayStudent.push(`("${id}", "${name}", "${email}")`);
+    arrayStudent.push({ id, name, email });
     for (let s = 0; s < 12; s++) {
       const challengeId = nanoid();
       const projectName = faker.git.commitMessage();
-      arrayChallenge.push(
-        `("${challengeId}","${id}","${projectName}","https://drive.google.com/f/${challengeId}")`
-      );
+      arrayChallenge.push({
+        id: challengeId,
+        studentId: id,
+        name: projectName,
+        googleDriveFolder: `https://drive.google.com/f/${challengeId}`,
+      });
     }
   }
-  const studentJoin = arrayStudent.join(",\n");
-  const challengeJoin = arrayChallenge.join(",\n");
-  const sqlStudent = `INSERT INTO student (id, name, email) VALUES ${studentJoin}`;
-  const sqlChallenge = `INSERT INTO challenge (id,studentId,name,googleDriveFolder) VALUES ${challengeJoin}`;
-  const [sql] = await mysql.query(`
-    TRUNCATE TABLE student;
-    TRUNCATE TABLE challenge;
-    ${sqlStudent};
-    ${sqlChallenge};`);
-  return sql;
+
+  const truncateStudent = await prisma.$executeRaw(`TRUNCATE TABLE student`);
+  const truncateChallenge = await prisma.$executeRaw(
+    `TRUNCATE TABLE challenge`
+  );
+  const createStudent = await prisma.student.createMany({
+    data: arrayStudent,
+  });
+  const createChallenge = await prisma.challenge.createMany({
+    data: arrayChallenge,
+  });
+  const result = {
+    truncateStudent,
+    truncateChallenge,
+    createStudent,
+    createChallenge,
+  };
+
+  return result;
 };
 
 export default generateData;

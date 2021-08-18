@@ -7,7 +7,7 @@ const handler = async (req, res): Promise<any> => {
     body: { page },
     method,
   } = req;
-  console.log(method);
+
   switch (method) {
     case "POST": {
       const { data } = await student.findAll(page);

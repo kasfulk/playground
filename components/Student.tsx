@@ -1,7 +1,9 @@
 import * as React from "react";
 import axios from "axios";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Student } from "types/student.interface";
+
+// const url: string = process.env.API_URL;
 
 const StudentCard: React.FC<{ data: Student[]; idReviewer: string }> = ({
   data,
@@ -9,14 +11,11 @@ const StudentCard: React.FC<{ data: Student[]; idReviewer: string }> = ({
 }): JSX.Element => {
   const [reviewerId, setReviewerId] = useState(idReviewer);
 
-  useEffect(() => {
-    getReviewer();
-  }, []);
-
   const getReviewer = async (): Promise<any> => {
     const { data } = await axios.get("http://localhost:3000/api/reviewer");
     setReviewerId(data.idReviewer);
   };
+  getReviewer();
 
   const setReviewer = async (id: string): Promise<any> => {
     const body = {
@@ -71,14 +70,14 @@ const StudentCard: React.FC<{ data: Student[]; idReviewer: string }> = ({
                     onClick={() => {
                       setReviewer(data.id);
                     }}
-                    className="bg-green-400 p-1 rounded-sm"
+                    className="bg-red-400 p-1 rounded-sm"
                   >
-                    Set As Reviewer
+                    Not Reviewer
                   </button>
                 )}
                 {data.id == reviewerId && (
-                  <button type="button" className="bg-blue-400 p-1 rounded-sm">
-                    This Is Reviewer
+                  <button type="button" className="bg-green-400 p-1 rounded-sm">
+                    Reviewer
                   </button>
                 )}
               </div>

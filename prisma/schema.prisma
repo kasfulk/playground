@@ -1,0 +1,31 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model student {
+  id    String  @id @db.VarChar(64)
+  name  String? @db.VarChar(255)
+  email String? @db.VarChar(255)
+}
+
+model challenge {
+  id                String                   @id @db.VarChar(64)
+  studentId         String                   @db.VarChar(64)
+  name              String                   @db.VarChar(255)
+  googleDriveFolder String?                  @db.VarChar(255)
+  gradingStatus     challenge_gradingStatus?
+  grade             Int?
+  reviewerId        String                   @db.VarChar(64)
+}
+
+enum challenge_gradingStatus {
+  UNSUBMITTED
+  SUBMITTED
+  GRADE_PASSED
+  GRADE_FAILED  @map("GRADE_FAILED")
+}

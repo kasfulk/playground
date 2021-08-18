@@ -1,21 +1,20 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { GetStaticProps } from "next";
 import axios from "axios";
 import Layout from "components/Layout";
 import StudentCard from "components/Student";
 import { StudentAll } from "models/student/student.interface";
 
-const url: string = process.env.API_URL;
+// const url: string = process.env.API_URL;
 
 interface PageRequest {
   page: number;
 }
 
 export const getStaticProps: GetStaticProps<StudentAll> = async () => {
-  const { data } = await axios.get(url + "api/student");
-  const reviewer = await axios.get(url + "api/reviewer");
-  const page = await axios.get(url + "api/student/total-page");
-  console.log(data);
+  const { data } = await axios.get("http://localhost:3000/api/student");
+  const reviewer = await axios.get("http://localhost:3000/api/reviewer");
+  const page = await axios.get("http://localhost:3000/api/student/total-page");
   return {
     props: {
       data,
@@ -30,35 +29,24 @@ export const StudentPage = ({ data, idReviewer, totalPage }): JSX.Element => {
   const [reviewer, setReviewer] = useState(idReviewer);
   const [page, setPage] = useState(1);
 
-  const nextPage = async (): Promise<void> => {
-    setPage(page + 1);
-    const body: PageRequest = {
-      page: page + 1,
+  useEffect(() => {
+    const getData = async (): Promise<void> => {
+      const body: PageRequest = {
+        page: page,
+      };
+      const { data } = await axios.post(
+        "http://localhost:3000/api/student",
+        body
+      );
+      const reviewerApi = await axios.get("http://localhost:3000/api/reviewer");
+      const reviewerData = reviewerApi.data.idReviewer
+        ? reviewerApi.data.idReviewer
+        : "";
+      setReviewer(reviewerData);
+      setView(data);
     };
-    const { data } = await axios.post(url + "api/student", body);
-    const reviewerApi = await axios.get(url + "api/reviewer");
-    const reviewerData = reviewerApi.data.idReviewer
-      ? reviewerApi.data.idReviewer
-      : "";
-    setReviewer(reviewerData);
-    setView(data);
-    console.log(data);
-  };
-
-  const prevPage = async (): Promise<void> => {
-    setPage(page - 1);
-    const body: PageRequest = {
-      page: page - 1,
-    };
-    const { data } = await axios.post(url + "api/student", body);
-    const reviewerApi = await axios.get(url + "api/reviewer");
-    const reviewerData = reviewerApi.data.idReviewer
-      ? reviewerApi.data.idReviewer
-      : "";
-    setReviewer(reviewerData);
-    setView(data);
-    console.log(data);
-  };
+    getData();
+  }, [page]);
 
   return (
     <>
@@ -66,7 +54,7 @@ export const StudentPage = ({ data, idReviewer, totalPage }): JSX.Element => {
         <div className="flex justify-content-between">
           <div className="w-10">
             {page != 1 && (
-              <button className="mx-2" onClick={() => prevPage()}>
+              <button className="mx-2" onClick={() => setPage(page - 1)}>
                 {"<<"}
               </button>
             )}
@@ -81,7 +69,7 @@ export const StudentPage = ({ data, idReviewer, totalPage }): JSX.Element => {
           </div>
           <div className="w-10">
             {page != totalPage && (
-              <button className="mx-2" onClick={() => nextPage()}>
+              <button className="mx-2" onClick={() => setPage(page + 1)}>
                 {">>"}
               </button>
             )}

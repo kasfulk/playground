@@ -1,27 +1,37 @@
-import mysql from "services/db";
+import { PrismaClient } from "@prisma/client";
 import { nanoid } from "nanoid";
-import { StudentResult, StudentAll, TotalPage } from "./student.interface";
+import { StudentResult, StudentAll } from "./student.interface";
 
 export class StudentModel {
+  private prisma = new PrismaClient();
   private limit = 12;
   async findId(id: string): Promise<StudentResult> {
-    const [rows] = await mysql.query(
-      `SELECT * FROM student WHERE id = ? ;
-        SELECT * FROM challenge WHERE studentId = ?`,
-      [id, id]
-    );
+    const student = await this.prisma.student.findUnique({
+      where: {
+        id,
+      },
+    });
+    const challenges = await this.prisma.challenge.findMany({
+      where: {
+        studentId: id,
+      },
+    });
+
     return {
-      student: rows[0][0],
-      challenge: rows[1],
+      student: student,
+      challenge: challenges,
     };
   }
 
-  async totalPage(): Promise<TotalPage> {
+  async totalPage(): Promise<any> {
     try {
-      const sql = `SELECT CEIL(COUNT(*)/${this.limit}) AS totalPage FROM student`;
-      const [rows] = await mysql.query(sql);
+      const result = await this.prisma.student.aggregate({
+        _count: {
+          id: true,
+        },
+      });
       return {
-        rows,
+        totalPage: Math.ceil(result._count.id / this.limit),
       };
     } catch (error) {
       return error;
@@ -31,11 +41,14 @@ export class StudentModel {
   async findAll(page: number): Promise<StudentAll> {
     const pageSql = page - 1;
     const skip = pageSql * this.limit;
-    const pagination = page ? `LIMIT ${skip},${this.limit}` : "";
     try {
-      const [rows] = await mysql.query(`SELECT * FROM student ${pagination};`);
+      const result = await this.prisma.student.findMany({
+        skip: skip,
+        take: this.limit,
+      });
+      console.log(result);
       return {
-        data: rows,
+        data: result,
       };
     } catch (error) {
       console.log(error);
@@ -50,14 +63,13 @@ export class StudentModel {
     }
     const dataId: string = nanoid();
 
-    const [rows] = await mysql.query(
-      `INSERT INTO student (id,name,email) VALUES (?,?,?);
-      SELECT * FROM student WHERE id = LAST_INSERT_ID()`,
-      [dataId, name, email]
+    const rows = await this.prisma.$queryRaw(
+      `INSERT INTO student (id,name,email) VALUES (${dataId},${name},${email});
+      SELECT * FROM student WHERE id = LAST_INSERT_ID()`
     );
     return {
       message: "Successfully inserted student!",
-      student: rows[1][0],
+      student: rows,
     };
   }
 }
