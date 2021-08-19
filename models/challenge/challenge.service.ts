@@ -70,12 +70,18 @@ export class ChallengeModel {
         gradingStatus: status,
       },
     });
+    const reviewerData = await this.prisma.student.findUnique({
+      where: {
+        id: result.reviewerId ? result.reviewerId : "",
+      },
+    });
 
     return {
       id,
       reviewer,
       status,
       result,
+      reviewerData,
     };
   }
 }
