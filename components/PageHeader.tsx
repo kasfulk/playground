@@ -38,17 +38,6 @@ const PageHeader: React.FC = () => {
                     <Link href="/student">Student</Link>
                   </div>
                 </li>
-                <li className="nav-item">
-                  <div
-                    className={
-                      router.pathname.includes("challenge")
-                        ? `active`
-                        : `defaultLink`
-                    }
-                  >
-                    <Link href="/challenge">Challenge</Link>
-                  </div>
-                </li>
               </ul>
             </div>
           </div>

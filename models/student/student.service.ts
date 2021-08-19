@@ -1,6 +1,7 @@
 import { PrismaClient } from "@prisma/client";
 import { nanoid } from "nanoid";
 import { StudentResult, StudentAll } from "./student.interface";
+import { StudentData } from "types/student.interface";
 
 export class StudentModel {
   private prisma = new PrismaClient();
@@ -45,6 +46,22 @@ export class StudentModel {
       const result = await this.prisma.student.findMany({
         skip: skip,
         take: this.limit,
+      });
+      console.log(result);
+      return {
+        data: result,
+      };
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  async allStudent(): Promise<StudentData> {
+    try {
+      const result = await this.prisma.student.findMany({
+        select: {
+          id: true,
+        },
       });
       console.log(result);
       return {

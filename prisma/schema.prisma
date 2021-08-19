@@ -18,7 +18,7 @@ model challenge {
   studentId         String                   @db.VarChar(64)
   name              String                   @db.VarChar(255)
   googleDriveFolder String?                  @db.VarChar(255)
-  gradingStatus     challenge_gradingStatus?
+  gradingStatus     challenge_gradingStatus? @default(UNSUBMITTED)
   grade             Int?
   reviewerId        String                   @db.VarChar(64)
 }

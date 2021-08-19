@@ -1,4 +1,5 @@
 import * as React from "react";
+import Link from "next/link";
 import axios from "axios";
 import { useState } from "react";
 import { Student } from "types/student.interface";
@@ -12,7 +13,7 @@ const StudentCard: React.FC<{ data: Student[]; idReviewer: string }> = ({
   const [reviewerId, setReviewerId] = useState(idReviewer);
 
   const getReviewer = async (): Promise<any> => {
-    const { data } = await axios.get("http://localhost:3000/api/reviewer");
+    const { data } = await axios.get("/api/reviewer");
     setReviewerId(data.idReviewer);
   };
   getReviewer();
@@ -21,10 +22,7 @@ const StudentCard: React.FC<{ data: Student[]; idReviewer: string }> = ({
     const body = {
       idReviewer: id,
     };
-    const { data } = await axios.post(
-      "http://localhost:3000/api/reviewer",
-      body
-    );
+    const { data } = await axios.post("/api/reviewer", body);
     setReviewerId(data.idReviewer);
   };
 
@@ -56,7 +54,7 @@ const StudentCard: React.FC<{ data: Student[]; idReviewer: string }> = ({
                 </div>
                 <div>
                   <p className="mb-0 text-base font-medium text-gray-900">
-                    {data.name}
+                    <Link href={"/student/" + data.id}>{data.name}</Link>
                   </p>
                   <p className="text-xs font-normal text-gray-800">
                     {data.email}

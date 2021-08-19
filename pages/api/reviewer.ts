@@ -2,7 +2,7 @@ import { ReviewerClass } from "models/reviewer/reviewer.service";
 
 const reviewer = new ReviewerClass();
 
-const handler = (req, res): void => {
+const handler = async (req, res): Promise<void> => {
   const {
     body: { idReviewer },
     method,
@@ -15,7 +15,10 @@ const handler = (req, res): void => {
     }
     case "GET": {
       const [reviewerData] = reviewer.getReviewer();
-      res.status(200).json(reviewerData);
+      // const reviewerDetail = await reviewer.getReviewerData();
+      res.status(200).json({
+        idReviewer: reviewerData?.idReviewer,
+      });
       break;
     }
 
