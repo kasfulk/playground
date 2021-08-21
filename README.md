@@ -2,7 +2,22 @@ This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next
 
 ## Getting Started
 
-First, run the development server:
+Before run the development server:
+
+```bash
+npm install
+cp .env.example
+```bash
+
+set db URL to your MySQL local server.
+
+after that, run:
+```bash
+npx prisma db push
+npx prisma generate
+```bash
+
+run the development server:
 
 ```bash
 npm run dev
