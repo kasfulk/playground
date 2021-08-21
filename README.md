@@ -7,7 +7,7 @@ Before run the development server:
 ```bash
 npm install
 cp .env.example
-```bash
+```
 
 set db URL to your MySQL local server.
 
@@ -15,7 +15,7 @@ after that, run:
 ```bash
 npx prisma db push
 npx prisma generate
-```bash
+```
 
 run the development server:
 
