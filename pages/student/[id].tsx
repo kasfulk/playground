@@ -15,7 +15,6 @@ interface Params extends ParsedUrlQuery {
 
 export const getStaticPaths: GetStaticPaths<Params> = async () => {
   const { data } = await student.allStudent();
-  console.log(data);
   const paths = [];
   for (let i = 1; i <= 50; i++) {
     for (const d of data)
